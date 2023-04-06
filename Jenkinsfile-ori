@@ -16,6 +16,8 @@ pipeline {
                 docker {
                     image 'qnib/pytest'
                 }
+//https://github.com/qnib/docker-pytest/blob/master/Dockerfile
+//RUN pip install docker-py feedparser nosexcover prometheus_client pycobertura pylint pytest pytest-cov requests setuptools sphinx
             }
             steps {
                 sh 'py.test --verbose --junit-xml test-reports/results.xml sources/test_calc.py'
