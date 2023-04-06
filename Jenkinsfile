@@ -15,15 +15,11 @@ pipeline {
         script{
 	        versionpython.each {item ->
 			    withPythonEnv("/usr/bin/${item}") {
-					stage("install requirement") {
-						steps{
-							sh "python --version"
-							sh "pip --version"
-							sh "pip install -r requirements.txt"
-							sh 'python -m py_compile sources/add2vals.py sources/calc.py'
-							sh 'py.test --verbose --junit-xml test-reports/results.xml sources/test_calc.py'
-						}
-					}
+					sh "python --version"
+					sh "pip --version"
+					sh "pip install -r requirements.txt"
+					sh 'python -m py_compile sources/add2vals.py sources/calc.py'
+					sh 'py.test --verbose --junit-xml test-reports/results.xml sources/test_calc.py'
 			    }
 	        }
 		}
