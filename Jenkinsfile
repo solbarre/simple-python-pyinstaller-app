@@ -24,21 +24,28 @@ pipeline {
         script{
 	        versionpython.each {item ->
 			    withPythonEnv("/usr/bin/${item}") {
-			        script {
-				        sh "python --version"
-				        sh "pip --version"
-				        sh "pip install -r requirements.txt"
-				    }
+					stage("install requirement") {
+						steps{
+							sh "python --version"
+							sh "pip --version"
+							sh "pip install -r requirements.txt"
+						}
+					}
+					stage("compilation") {
+						steps{
+						   sh 'python -m py_compile sources/add2vals.py sources/calc.py'
+						}
+					}
+					stage("test") {
+					    steps{
+							sh 'py.test --verbose --junit-xml test-reports/results.xml sources/test_calc.py'
+						}
+					}
 			    }
 	        }
 		}
       }
     }
-	stage("compilation") {
-	    agent { label 'slave_d1' }
-	    steps{
-			sh 'python -m py_compile sources/add2vals.py sources/calc.py'
-		}
-	}
+
   }
 }
