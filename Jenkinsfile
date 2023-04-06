@@ -9,17 +9,40 @@ pipeline {
     timestamps()
   }
   stages {
-    stage("install requirements Python"){
+    stage("python"){
 	  agent { label 'slave_d1' }
       steps{
         script{
 	        versionpython.each {item ->
 			    withPythonEnv("/usr/bin/${item}") {
-					sh "python --version"
-					sh "pip --version"
-					sh "pip install -r requirements.txt"
-					sh 'python -m py_compile sources/add2vals.py sources/calc.py'
-					sh 'py.test --verbose --junit-xml test-reports/results.xml sources/test_calc.py'
+					stages {
+						stage('install requirement'){
+							steps{
+								sh "python --version"
+								sh "pip --version"
+								sh "pip install -r requirements.txt"
+							}
+						stage('compilation') {
+							steps{
+								sh 'python -m py_compile sources/add2vals.py sources/calc.py'
+							}
+						}
+						stage('py test') {
+							steps{
+								sh 'py.test --verbose --junit-xml test-reports/results.xml sources/test_calc.py'
+							}
+							post {
+								always {
+									junit 'test-reports/results.xml'
+								}
+							}
+						}						
+						stage('deliver') {
+							steps{
+								sh 'pyinstaller --onefile sources/add2vals.py'
+							}
+						}
+					}
 			    }
 	        }
 		}
