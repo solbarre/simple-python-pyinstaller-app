@@ -9,15 +9,6 @@ pipeline {
     timestamps()
   }
   stages {
-    stage("checkout projet python") {
-        agent { label 'slave_d1' }
-		steps{
-			script{
-				git branch: 'master', url: 'https://github.com/solbarre/simple-python-pyinstaller-app.git'
-				sh "ls -lart ./*"
-			}
-        }
-	}
     stage("install requirements Python"){
 	  agent { label 'slave_d1' }
       steps{
@@ -29,15 +20,7 @@ pipeline {
 							sh "python --version"
 							sh "pip --version"
 							sh "pip install -r requirements.txt"
-						}
-					}
-					stage("compilation") {
-						steps{
-						   sh 'python -m py_compile sources/add2vals.py sources/calc.py'
-						}
-					}
-					stage("test") {
-					    steps{
+							sh 'python -m py_compile sources/add2vals.py sources/calc.py'
 							sh 'py.test --verbose --junit-xml test-reports/results.xml sources/test_calc.py'
 						}
 					}
