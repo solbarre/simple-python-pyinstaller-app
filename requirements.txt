@@ -4,3 +4,4 @@ pycobertura
 pylint 
 pytest 
 pytest-cov
+cpplint
