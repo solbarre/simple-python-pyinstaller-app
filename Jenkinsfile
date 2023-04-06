@@ -13,7 +13,7 @@ pipeline {
         agent { label 'slave_d1' }
 		steps{
 			script{
-				git branch: 'main', url: 'https://github.com/solbarre/simple-python-pyinstaller-app.git'
+				git branch: 'master', url: 'https://github.com/solbarre/simple-python-pyinstaller-app.git'
 				sh "ls -lart ./*"
 			}
         }
