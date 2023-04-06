@@ -1,6 +1,5 @@
 feedparser 
 nosexcover
-ssl
 pycobertura 
 pylint 
 pytest 
